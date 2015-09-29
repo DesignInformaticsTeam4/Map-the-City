@@ -16,7 +16,7 @@ cfg = None
 
 @app.route('/')
 def index():
-    return render_template('stuff.html')
+    return render_template('index.html')
 
 
 if __name__ == "__main__":
