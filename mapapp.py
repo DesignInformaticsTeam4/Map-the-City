@@ -1,6 +1,7 @@
 
 from flask import Flask, request, session, render_template
 import os
+import json
 
 __author__ = 'kongaloosh'
 
@@ -16,7 +17,11 @@ cfg = None
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    locs = []
+    with open('static/data/memories.json') as data_file:
+        data = json.load(data_file)
+        locs.append(data)
+    return render_template('index.html', locations=locs, data=open('static/data/memories.json').read() )
 
 
 if __name__ == "__main__":

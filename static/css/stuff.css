@@ -61,7 +61,14 @@ body{
 	height: 100%;
 	min-height: 100%
 }
+
+.nav{
+    max-height: 10px;
+    overflow-y:scroll;
+}
+
 /*
+
 #map-canvas {
 	width:100%;
     height:calc(100% - 0);
