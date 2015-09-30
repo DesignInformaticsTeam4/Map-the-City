@@ -28,7 +28,12 @@ function initialize() {
 //          map: map
 //        });
         for (i=0; i < data.length; i++){
-          $("#result").text(data[i].title);
+          var myLatLng = {lat: -25.363, lng: 131.044};
+          var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: 'Hello World!'
+          });
         }
       });
 };
