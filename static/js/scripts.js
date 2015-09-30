@@ -31,11 +31,12 @@ function initialize() {                                                       //
             });                                                                   // end making marker
 
             markers.push(marker);
-            markers[i].setMap(map);
+            marker.setMap(map);
 
-            marker.addListener('click', function() {
-                map.setZoom(8);
-                map.setCenter(marker.getPosition());
+            marker.addListener('click', function(marker) {
+                alert(marker.title);
+//                map.setZoom(8);
+//                map.setCenter(marker.getPosition());
             });
 
 
