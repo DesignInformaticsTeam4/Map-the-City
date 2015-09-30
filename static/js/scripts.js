@@ -23,7 +23,13 @@ function initialize() {
   marker.setMap(map);
   //
   $.getJSON('/json-data/', function(data) {
-        $("#result").text(data);
+//        marker = new google.maps.Marker({
+//          position: new google.maps.LatLng(data[i].latitude, data[i].longitude),
+//          map: map
+//        });
+        for (i=0; i < data.length; i++){
+          $("#result").text(data[i].title);
+        }
       });
 };
 /* end google maps -----------------------------------------------------*/
