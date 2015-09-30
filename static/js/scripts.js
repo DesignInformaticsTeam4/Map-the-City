@@ -29,12 +29,14 @@ function initialize() {                                                       //
                 map: map,
                 title: data[i].title                                              // get the memory title
             });                                                                   // end making marker
-
+            marker.name = data[i].title
             markers.push(marker);
             marker.setMap(map);
 
             marker.addListener('click', function(marker) {
-                alert(marker.title);
+                alert('yup');
+                var div = document.getElementById('638');
+                div.style.backgroundColor='#EBEBEB';
 //                map.setZoom(8);
 //                map.setCenter(marker.getPosition());
             });
