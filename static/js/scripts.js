@@ -2,6 +2,12 @@
 $(document).ready(function(){/* google maps -----------------------------------------------------*/
 google.maps.event.addDomListener(window, 'load', initialize);
 
+
+function toggleBounce(marker) {
+    alert('hunch hunch');
+    alert(marker.title);
+}
+
 function initialize() {                                                       // initialize the map
   var latlng = new google.maps.LatLng(55.953251, -3.188267);                  // set map to edinburgh
 
@@ -10,12 +16,6 @@ function initialize() {                                                       //
     scrollWheel: false,
     zoom: 13
   };
-
-//  var marker = new google.maps.Marker({                                       // add central marker
-//    position: latlng,
-//    url: '/',
-//    animation: google.maps.Animation.DROP
-//  });
 
   $.getJSON('/json-data/', function(data) {                                      // request the json data from flask app
         var map = new google.maps.Map(document.getElementById("map"), mapOptions);     // map
@@ -33,11 +33,16 @@ function initialize() {                                                       //
             markers.push(marker);
             markers[i].setMap(map);
 
-            function toggleBounce() {
-                alert(marker.title);
-            }
+            marker.addListener('click', function() {
+                map.setZoom(8);
+                map.setCenter(marker.getPosition());
+            });
 
-            marker.addListener('click', toggleBounce);                          // add animation listener
+
+//            markers[i].addListener('click', toggleBounce(markers[i]) {
+//
+//
+//            });                          // add animation listener
         }   // end for
     }); // end marker adding
 };  // end ajax
