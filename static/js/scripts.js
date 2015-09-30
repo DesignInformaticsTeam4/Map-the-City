@@ -22,10 +22,9 @@ function initialize() {
   var map = new google.maps.Map(document.getElementById("map"), mapOptions);
   marker.setMap(map);
   //
-
-  var mydata = JSON.parse(data);
-  alert(mydata[0]);
-
+  $.getJSON('/json-data/', function(data) {
+        $("#result").text(data);
+      });
 };
 /* end google maps -----------------------------------------------------*/
 });
