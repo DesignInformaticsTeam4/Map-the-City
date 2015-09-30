@@ -21,8 +21,12 @@ def index():
     with open('static/data/memories.json') as data_file:
         data = json.load(data_file)
         locs.append(data)
-    return render_template('index.html', locations=locs, data=open('static/data/memories.json').read() )
+    return render_template('index.html', locations=locs, data=open('static/data/memories.json').read().decode('utf-8') )
 
+
+@app.route('/json-data/')
+def json_data():
+        return open('static/data/memories.json').read()
 
 if __name__ == "__main__":
     app.run(debug=True)

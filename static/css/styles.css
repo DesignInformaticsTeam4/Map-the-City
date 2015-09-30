@@ -1,20 +1,10 @@
-/*
-A custom Bootstrap 3.1 theme from http://bootply.com\
-
-This CSS code should follow the 'bootstrap.css'
-in your HTML file.
-
-license: MIT
-author: bootply.com
-*/
-
-
 html,body{
   	height:100%;
 }
 
 body{
   	padding-top:50px; /*padding for navbar*/
+  	background-color: #E6E6E6;
 }
 
 .navbar-custom .icon-bar {
@@ -53,7 +43,25 @@ body{
 	height:100%;
 }
 
-#map-canvas {
+
+.sites{
+	padding: 15px;
+	background-color:white;
+}
+
+.map-box{
+	background: white;
+	padding:0px;
+	box-shadow: 0px 0px 10px 5px #888888;
+}
+
+.map{
+	/*padding: 10px;*/
+	box-shadow: 10px 10px 5px #888888;
+}
+
+
+/*#map-canvas {
 	width:33.3333%;
     height:calc(100% - 0);
     position:absolute;
@@ -61,4 +69,4 @@ body{
     top:50px;
     bottom:0;
     overflow:hidden;
-}
+}*/
