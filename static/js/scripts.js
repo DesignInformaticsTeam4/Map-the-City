@@ -6,8 +6,6 @@ $(document).ready(function(){/* google maps ------------------------------------
         var div = document.getElementById(id);
         div.style.backgroundColor='#EBEBEB';
     }
-
-    var location = navigator.geolocation.getCurrentPosition();
     alert(location.coords.latitude)
     console.log('here')
     /*
@@ -30,6 +28,11 @@ $(document).ready(function(){/* google maps ------------------------------------
     //    var GeoMarker = new GeolocationMarker(map);
 
         $.getJSON('/json-data/', function(data) {                                           // request the json data from flask app
+            var myLatLng = null
+            navigator.geolocation.getCurrentPosition(function(position) {
+                    myLatLng = (position.coords.latitude, position.coords.longitude )
+                };
+            });
             var map = new google.maps.Map(document.getElementById("map"), mapOptions);      // map
             var markers = [];
 
@@ -46,18 +49,7 @@ $(document).ready(function(){/* google maps ------------------------------------
                 markers.push(marker);
                 marker.setMap(map);
                 var id = data[i].id
-                marker.addListener('click', function(){
-    //                highlight_trigger(marker.id)
-                    var div = document.getElementById(marker.id);
-                    div.style.backgroundColor='#EBEBEB';
-
-                    });
-
-    //            markers[i].addListener('click', toggleBounce(markers[i]) {
-    //
-    //
-    //            });                          // add animation listener
-                }   // end for
+            }   // end for
         }); // end marker adding
     };  // end ajax
 /* end google maps -----------------------------------------------------*/
