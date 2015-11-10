@@ -2,6 +2,7 @@ from flask_oauth import OAuth
 from flask import Flask, request, session, render_template, redirect, url_for
 import os
 import json
+import pickle
 
 __author__ = 'kongaloosh'
 
@@ -12,26 +13,31 @@ DEBUG = True
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['STATIC_FOLDER'] = os.getcwd()
+app.config['SECRET_KEY'] = 'pamplemousse'
 cfg = None
 
 oauth = OAuth()
+
+twitter_config = pickle.load(open('keys/twitter/twitter.pkl','r'))
 
 twitter = oauth.remote_app('twitter',
     base_url='https://api.twitter.com/1/',
     request_token_url='https://api.twitter.com/oauth/request_token',
     access_token_url='https://api.twitter.com/oauth/access_token',
     authorize_url='https://api.twitter.com/oauth/authenticate',
-    consumer_key='<your key here>',
-    consumer_secret='<your secret here>'
+    consumer_key=twitter_config['consumer_key'],
+    consumer_secret=twitter_config
 )
+
+facebook_config = pickle.load(open('keys/facebook/facebook.pkl','r'))
 
 facebook = oauth.remote_app('facebook',
     base_url='https://graph.facebook.com/',
     request_token_url=None,
     access_token_url='/oauth/access_token',
     authorize_url='https://www.facebook.com/dialog/oauth',
-    consumer_key=FACEBOOK_APP_ID,
-    consumer_secret=FACEBOOK_APP_SECRET,
+    consumer_key=facebook_config['id'],
+    consumer_secret=facebook_config['secret'],
     request_token_params={'scope': ('email, ')}
 )
 
@@ -60,9 +66,6 @@ def pop_login_session():
 
 
 @app.route("/facebook_login")
-def facebook_login():
-    return facebook.authorize(callback=url_for('facebook_authorized',
-        next=request.args.get('next'), _external=True))
 
 
 @app.route("/facebook_authorized")
@@ -76,7 +79,6 @@ def facebook_authorized(resp):
     session['facebook_token'] = (resp['access_token'], '')
 
     return redirect(next_url)
-
 
 @app.route("/logout")
 def logout():
