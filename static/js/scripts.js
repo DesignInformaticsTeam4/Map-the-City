@@ -11,8 +11,9 @@ function getLocation() {
 function makeMap(position){
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: position.coords.latitude, lng: position.coords.longitude},
-        zoom: 8
+        zoom: 15
     });
+    var GeoMarker = new GeolocationMarker(map);
 }
 
 function initMap() {                    // this gets called by the thingy
