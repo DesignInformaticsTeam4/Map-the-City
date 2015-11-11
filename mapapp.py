@@ -1,6 +1,6 @@
 from contextlib import closing
 from flask_oauth import OAuth, OAuthException
-from flask import Flask, request, session, render_template, redirect, url_for
+from flask import Flask, request, session, render_template, redirect, url_for, g
 import os
 import json
 import pickle
@@ -45,6 +45,20 @@ def teardown_request(exception):
     if db is not None:
         db.close()
 
+@app.route('/test/<user_name>')
+def create_if_new_user(user_name):
+    try:
+        app.logger.info("""SELECT * FROM users WHERE user_name = {name};""".format(name=user_name))
+        cur = g.db.execute(
+            """SELECT * FROM users WHERE user_name = '{name}'""".format(name=user_name))
+    except sqlite3.OperationalError:
+        g.db.execute(
+         'insert into users (user_name) values (?)',[user_name]
+        )
+        g.db.commit()
+        return url_for('new_user')
+    return url_for('welcome')
+#
 # ====================================================================================================================
 #                                                 o auth setup
 # ====================================================================================================================
@@ -165,7 +179,7 @@ def twitter_authorized(resp):
             resp['oauth_token_secret']
         )
         session['twitter_user'] = resp['screen_name']
-
+        create_if_new_user(session['twitter_user'])
         app.logger.info('You were signed in as %s' % resp['screen_name'])
         return redirect(next_url)
     except OAuthException:
@@ -177,7 +191,7 @@ def get_twitter_token(token=None):
     return session.get('twitter_token')
 
 # ====================================================================================================================
-#                                               twitter oauth
+#                                               Basic Views
 # ====================================================================================================================
 
 @app.route('/u/<name>')
@@ -185,6 +199,14 @@ def user_page(name):
     """given some user id, find the stats of the user"""
     return None
 
+@app.route('/new_user')
+def new_user():
+    render_template('new_user.html')
+
+
+@app.route('/welcome_back')
+def welcome():
+    render_template('welcome.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
