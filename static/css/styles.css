@@ -56,14 +56,21 @@ body{
 }
 
 .map{
-	/*padding: 10px;*/
+	padding: 10px;
 	box-shadow: 10px 10px 5px #888888;
 }
 
 body{
 	background: url(../img/hidden-edinburgh.jpg) no-repeat fixed;
-	/*background: black;*/
 }
+
+#logo{
+	/*text-align: center;*/
+	font-family: "Pacifico",Helvetica cursive, Helvetica;
+	color: #33001A;
+}
+
+
 
 /*#map-canvas {
 	width:33.3333%;
