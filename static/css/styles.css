@@ -60,6 +60,10 @@ body{
 	box-shadow: 10px 10px 5px #888888;
 }
 
+body{
+	background: url(../img/hidden-edinburgh.jpg) no-repeat fixed;
+	/*background: black;*/
+}
 
 /*#map-canvas {
 	width:33.3333%;
