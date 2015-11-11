@@ -1,8 +1,10 @@
+from contextlib import closing
 from flask_oauth import OAuth, OAuthException
 from flask import Flask, request, session, render_template, redirect, url_for
 import os
 import json
 import pickle
+import sqlite3
 
 __author__ = 'kongaloosh'
 
@@ -17,6 +19,31 @@ app.config['SECRET_KEY'] = 'pamplemousse'
 cfg = None
 
 oauth = OAuth()
+
+# ====================================================================================================================
+#                                                 dbms
+# ====================================================================================================================
+
+def init_db():
+    with closing(connect_db()) as db:
+        with app.open_resource('schema.sql', mode='r') as f:
+            db.cursor().executescript(f.read())
+        db.commit()
+
+def connect_db():
+    return sqlite3.connect(app.config['DATABASE'])
+
+
+@app.before_request
+def before_request():
+    g.db = connect_db()
+
+
+@app.teardown_request
+def teardown_request(exception):
+    db = getattr(g, 'db', None)
+    if db is not None:
+        db.close()
 
 # ====================================================================================================================
 #                                                 o auth setup
@@ -60,7 +87,7 @@ def index():
         app.logger.info(session['twitter_user'])
         app.logger.info(session)
 
-    return render_template('index.html', locations=locs, data=open('static/data/memories.json').read().decode('utf-8'), session)
+    return render_template('index.html', locations=locs, data=open('static/data/memories.json').read().decode('utf-8'), session=session)
 
 # ====================================================================================================================
 #                                                  data
@@ -148,6 +175,15 @@ def twitter_authorized(resp):
 @twitter.tokengetter
 def get_twitter_token(token=None):
     return session.get('twitter_token')
+
+# ====================================================================================================================
+#                                               twitter oauth
+# ====================================================================================================================
+
+@app.route('/u/<name>')
+def user_page(name):
+    """given some user id, find the stats of the user"""
+    return None
 
 
 if __name__ == "__main__":
