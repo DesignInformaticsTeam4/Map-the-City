@@ -1,4 +1,4 @@
-from flask_oauth import OAuth
+from flask_oauth import OAuth, OAuthException
 from flask import Flask, request, session, render_template, redirect, url_for
 import os
 import json
@@ -56,7 +56,11 @@ def index():
     with open('static/data/memories.json') as data_file:
         data = json.load(data_file)
         locs.append(data)
-    return render_template('index.html', locations=locs, data=open('static/data/memories.json').read().decode('utf-8') )
+    if session and session['logged_in'] == True:
+        app.logger.info(session['twitter_user'])
+        app.logger.info(session)
+
+    return render_template('index.html', locations=locs, data=open('static/data/memories.json').read().decode('utf-8'), session)
 
 # ====================================================================================================================
 #                                                  data
@@ -76,9 +80,14 @@ def get_facebook_token():
 
 
 def pop_login_session():
-    session.pop('logged_in', None)
-    session.pop('facebook_token', None)
-
+    try: session.pop('logged_in', None)
+    except KeyError: pass
+    try: session.pop('facebook_token', None)
+    except KeyError: pass
+    try: session.pop('twitter_token', None)
+    except KeyError: pass
+    try: session.pop('twitter_user', None)
+    except KeyError: pass
 
 @app.route("/facebook_login")
 def facebook_login():
@@ -116,15 +125,24 @@ def login():
 @app.route('/twitter_authorized')
 @twitter.authorized_handler
 def twitter_authorized(resp):
-    app.logger.info(twitter_config['consumer_secret'])
-    next_url = request.args.get('next') or url_for('index')
-    if resp is None or 'access_token' not in resp:
+    try:
+        next_url = request.args.get('next') or url_for('index')
+        if resp is None:
+            app.logger.info(resp)
+            return redirect(next_url)
+
+        session['logged_in'] = True;
+
+        session['twitter_token'] = (
+            resp['oauth_token'],
+            resp['oauth_token_secret']
+        )
+        session['twitter_user'] = resp['screen_name']
+
+        app.logger.info('You were signed in as %s' % resp['screen_name'])
         return redirect(next_url)
-
-    session['logged_in'] = True
-    session['twitter_token'] = (resp['access_token'], '')
-
-    return redirect(next_url)
+    except OAuthException:
+        redirect('/')
 
 
 @twitter.tokengetter
