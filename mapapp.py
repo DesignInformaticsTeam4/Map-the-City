@@ -69,8 +69,7 @@ def teardown_request(exception):
     if db is not None:
         db.close()
 
-@app.route('/test/<user_name>')
-def create_if_new_user(user_name):
+def create_if_new_user(user_name, g):
     # try:
     cur = g.db.execute(
         """
@@ -228,7 +227,7 @@ def twitter_authorized(resp):
             resp['oauth_token_secret']
         )
         session['twitter_user'] = resp['screen_name']
-        create_if_new_user(session['twitter_user'])
+        create_if_new_user(session['twitter_user'], g)
         app.logger.info('You were signed in as %s' % resp['screen_name'])
         return redirect(next_url)
     except OAuthException:
