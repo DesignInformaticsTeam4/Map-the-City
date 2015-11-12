@@ -24,9 +24,23 @@ oauth = OAuth()
 #                                                 dbms
 # ====================================================================================================================
 
-def add_story(name):
-    raise NotImplementedError("need to implement")
-
+@app.route('/add_story/<story_name>')
+def add_story(story_name):
+    if session['twitter_user'] == 'kongaloosh':             # if the current user is admin
+        cur = g.db.execute(                                 # get all the users
+                """
+                SELECT DISTINCT users.user_name
+                FROM users
+                """
+            )
+        for (user,) in cur.fetchall():                      # for each user
+            g.db.execute(                                   # for add them to the begining of the story
+                """
+                INSERT INTO progression (user_name, story_name)
+                values (?, ?)
+                """, [user, story_name]
+            )
+    return render_template('new_user.html')
 
 # ====================================================================================================================
 #                                                 dbms
