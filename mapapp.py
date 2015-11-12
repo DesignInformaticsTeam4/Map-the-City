@@ -33,6 +33,7 @@ def add_story(story_name):
                 FROM users
                 """
             )
+
         for (user,) in cur.fetchall():                      # for each user
             g.db.execute(                                   # for add them to the begining of the story
                 """
@@ -40,6 +41,7 @@ def add_story(story_name):
                 values (?, ?)
                 """, [user, story_name]
             )
+            g.db.commit()
     return render_template('new_user.html')
 
 # ====================================================================================================================
@@ -71,17 +73,35 @@ def teardown_request(exception):
 def create_if_new_user(user_name):
     # try:
     cur = g.db.execute(
-        """SELECT * FROM users WHERE user_name = '{name}'""".format(name=user_name))
-    if cur.fetchall() == []:
-        g.db.execute('insert into users (user_name) values (?)',[user_name])
+        """
+            SELECT *
+            FROM users
+            WHERE user_name = '{name}'
+        """.format(name=user_name))
+    if cur.fetchall() == []:                    # if the user doesn't exist
+        g.db.execute(                           # add the user
+            """
+                INSERT INTO users
+                (user_name) VALUES (?)
+            """,[user_name])
         g.db.commit()
-        cur = g.db.execute(
+
+        cur = g.db.execute(                     # get all current stories
             """
             SELECT DISTINCT progression.story_name
             FROM progression
             """
         )
-        app.logger.info(cur)
+        for (story_name,) in cur.fetchall():    # for all stories
+            cur = g.db.execute(                 # insert the next story
+                """
+                    INSERT INTO progression
+                    (user_name, story_name)
+                    values (?, ?)
+                """, [user_name, story_name]
+            )
+            g.db.commit()
+            app.logger.info(story_name)
         return url_for('new_user')
     else:
         return url_for('welcome')
