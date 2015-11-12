@@ -24,6 +24,14 @@ oauth = OAuth()
 #                                                 dbms
 # ====================================================================================================================
 
+def add_story(name):
+    raise NotImplementedError("need to implement")
+
+
+# ====================================================================================================================
+#                                                 dbms
+# ====================================================================================================================
+
 def init_db():
     with closing(connect_db()) as db:
         with app.open_resource('schema.sql', mode='r') as f:
@@ -47,17 +55,24 @@ def teardown_request(exception):
 
 @app.route('/test/<user_name>')
 def create_if_new_user(user_name):
-    try:
-        app.logger.info("""SELECT * FROM users WHERE user_name = {name};""".format(name=user_name))
-        cur = g.db.execute(
-            """SELECT * FROM users WHERE user_name = '{name}'""".format(name=user_name))
-    except sqlite3.OperationalError:
-        g.db.execute(
-         'insert into users (user_name) values (?)',[user_name]
-        )
+    # try:
+    cur = g.db.execute(
+        """SELECT * FROM users WHERE user_name = '{name}'""".format(name=user_name))
+    if cur.fetchall() == []:
+        g.db.execute('insert into users (user_name) values (?)',[user_name])
         g.db.commit()
+        cur = g.db.execute(
+            """
+            SELECT DISTINCT progression.story_name
+            FROM progression
+            """
+        )
+        app.logger.info(cur)
         return url_for('new_user')
-    return url_for('welcome')
+    else:
+        return url_for('welcome')
+    # except sqlite3.OperationalError:
+    #     raise NotImplementedError("you need to re-direct to an error page")
 #
 # ====================================================================================================================
 #                                                 o auth setup
