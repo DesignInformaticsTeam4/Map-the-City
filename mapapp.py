@@ -176,7 +176,7 @@ def json_data():
         user_data['next_point'] = parsed[active_point]              # Add the next active point
         user_data['hidden_points'] = parsed[active_point:]          # Add the remaining points
         return json.dumps(user_data)
-    return open('static/data/memories.json').read()
+    return redirect('/')
 
 
 @app.route('/story/<story_name>')
