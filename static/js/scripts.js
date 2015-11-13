@@ -53,17 +53,16 @@ function add_points(){
     $.getJSON('/json-data/', function(data) {                     // request the json data from flask app
 
         var myLatLng = {lat: data.next_point.latitude, lng: data.next_point.longitude};
-        var main_marker = new google.maps.Marker({
+        var marker = new google.maps.Marker({
                 position: myLatLng,
                 map: map,
                 title: data.next_point.title                                              // get the memory title
         });
-        alert(main_marker.position);
-//        marker.id = data.next_point.id;
-        main_marker.setMap(map);
-        markers.push(main_marker);
-
-//        var id = data.next_point.id;
+        alert(marker.position);
+        marker.id = data.next_point.id;
+        marker.setMap(map);
+        markers.push(marker);
+        var id = data.next_point.id;
 
 //        Add Hidden Points
 //        data = data.hidden_points;
