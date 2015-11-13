@@ -157,7 +157,32 @@ def index():
 
 @app.route('/json-data/')
 def json_data():
-        return open('static/data/memories.json').read()
+    """Separates the current story-line into the next point and the remaining points (to be unlocked)"""
+    if session and session['logged_in']:
+        cur = g.db.execute(                                         # Find the next point in the story
+                    """
+                        SELECT progression.point_number
+                        FROM progression
+                        WHERE progression.user_name = '{user_name}'
+                        AND story_name = 'memories'
+                    """.format(user_name=session['twitter_user'],),
+                )
+        (active_point,) = cur.fetchall()[0]                         # Parse the next point
+        app.logger.info(active_point)
+        data = open('static/data/memories.json').read()             # Open the current point
+        parsed = json.loads(data)
+
+        user_data = {}                                              # The data we're returning
+        user_data['next_point'] = parsed[active_point]              # Add the next active point
+        user_data['hidden_points'] = parsed[active_point:]          # Add the remaining points
+        return json.dumps(user_data)
+    return open('static/data/memories.json').read()
+
+
+@app.route('/story/<story_name>')
+def story_name(story_name):
+    """returns the data for a specific"""
+
 
 # ====================================================================================================================
 #                                           facebook oauth
