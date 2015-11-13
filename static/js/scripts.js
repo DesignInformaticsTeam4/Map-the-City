@@ -52,27 +52,37 @@ function add_point(lat_lng, is_grey){
 function add_points(){
     $.getJSON('/json-data/', function(data) {                     // request the json data from flask app
 
-//        add_point(data.next_point[0], false);
-
-
-//        Add Hidden Points
-        data = data.hidden_points;
-        var grey = 'static/img/grey-marker.png';
-        for (i=0; i < data.length; i++){
-            var myLatLng = {lat: data[i].latitude, lng: data[i].longitude};      // add the lat and lang of a json loc
-
-            var marker = new google.maps.Marker({
+        var myLatLng = {lat: data.next_point.latitude, lng: data.next_point.longitude};
+        var main_marker = new google.maps.Marker({
                 position: myLatLng,
                 map: map,
-                title: data[i].title ,                                             // get the memory title
-                icon: grey
-            });                                                                   // end making marker
+                title: data.next_point.title                                              // get the memory title
+        });
+        alert(main_marker.position);
+//        marker.id = data.next_point.id;
+        main_marker.setMap(map);
+        markers.push(main_marker);
 
-            marker.id = data[i].id
-            markers.push(marker);
-            marker.setMap(map);
-            var id = data[i].id
-        } // end for
+//        var id = data.next_point.id;
+
+//        Add Hidden Points
+//        data = data.hidden_points;
+//        var grey = 'static/img/grey-marker.png';
+//        for (i=0; i < data.length; i++){
+//            var myLatLng = {lat: data[i].latitude, lng: data[i].longitude};      // add the lat and lang of a json loc
+//
+//            var marker = new google.maps.Marker({
+//                position: myLatLng,
+//                map: map,
+//                title: data[i].title ,                                             // get the memory title
+//                icon: grey
+//            });                                                                   // end making marker
+//
+//            marker.id = data[i].id;
+//            markers.push(marker);
+//            marker.setMap(map);
+//            var id = data[i].id;
+//        } // end for
     }); // end marker adding ajax
 }
 
