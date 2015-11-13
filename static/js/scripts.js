@@ -65,23 +65,23 @@ function add_points(){
         var id = data.next_point.id;
 
 //        Add Hidden Points
-//        data = data.hidden_points;
-//        var grey = 'static/img/grey-marker.png';
-//        for (i=0; i < data.length; i++){
-//            var myLatLng = {lat: data[i].latitude, lng: data[i].longitude};      // add the lat and lang of a json loc
-//
-//            var marker = new google.maps.Marker({
-//                position: myLatLng,
-//                map: map,
-//                title: data[i].title ,                                             // get the memory title
-//                icon: grey
-//            });                                                                   // end making marker
-//
-//            marker.id = data[i].id;
-//            markers.push(marker);
-//            marker.setMap(map);
-//            var id = data[i].id;
-//        } // end for
+        data = data.hidden_points;
+        var grey = 'static/img/grey-marker.png';
+        for (i=0; i < data.length; i++){
+            var myLatLng = {lat: data[i].latitude, lng: data[i].longitude};      // add the lat and lang of a json loc
+
+            var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: data[i].title ,                                             // get the memory title
+                icon: grey
+            });                                                                   // end making marker
+
+            marker.id = data[i].id;
+            markers.push(marker);
+            marker.setMap(map);
+            var id = data[i].id;
+        } // end for
     }); // end marker adding ajax
 }
 

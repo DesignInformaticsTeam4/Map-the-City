@@ -1,95 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<meta charset="utf-8">
-		<title>flowEd</title>
-		<meta name="generator" content="Bootply" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-		<link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <title>flowEd</title>
+  <meta name="generator" content="Bootply" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
 
-		<!-- Hacked together data -->
-		<script>
+  <!-- Hacked together data -->
+  <script>
 			var data = '{{data}}';
 		</script>
-        <!--[if lt IE 9]>
-			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-	</head>
-	<body>
+  <!--[if lt IE 9]>
+  <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+<body>
 <!-- begin template -->
 
 <!--<div id="map-canvas"></div>-->
 <div class="container-fluid" id="main">
-	<nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand logo" id="logo" href="#">flowED</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="u/{{session.twitter_token}}">{{session.twitter_user}}</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand logo" id="logo" href="#">flowED</a>
       </div>
-    </nav>
-	<div id="result"></div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="http://flowed.kongaloosh.com">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Action</a></li>
+              <li><a href="#">Another action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li role="separator" class="divider"></li>
+              <li class="dropdown-header">Nav header</li>
+              <li><a href="#">Separated link</a></li>
+              <li><a href="#">One more separated link</a></li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="u/{{session.twitter_user}}">{{session.twitter_user}}</a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav>
+  <div id="result"></div>
   <div class="row col-md-offset-1 col-md-10 map-box">
     <div class="col-md-8 map" id="map" style="height:100%"></div>
-	<div class="col-md-4 sites nav-stacked" id="sidebar" style="height:100%;overflow-y:scroll;">
-		<div>
-			{% for loc in locations %}
-			{% for site in loc %}
-				<div class="site" id="{{site.id}}">
-					<h2>{{site.title}}</h2>
-					<p>{{site.description}}</p>
-				</div>
-				<hr>
-			{% endfor %}
-			{% endfor %}
-		</div>
-	</div>
-  </div>
-    <!--<div class="col-xs-8 col-md-8 col-lg-8">&lt;!&ndash;map-canvas will be postioned here&ndash;&gt;</div>-->
-
+    <div class="col-md-4 sites nav-stacked" id="sidebar" style="height:100%;overflow-y:scroll;">
+      <div>
+        {% for loc in locations %}
+        {% for site in loc %}
+        <div class="site" id="{{site.id}}">
+          <h2>{{site.title}}</h2>
+          <p>{{site.description}}</p>
+        </div>
+        <hr>
+        {% endfor %}
+        {% endfor %}
+      </div>
+    </div>
   </div>
 </div>
+</div>
 <!-- end template -->
-	<!-- script references -->
-		<!-- AIzaSyDwCiB6WsPt1-3Jl-_clUJ7wO6ZxHvj5nk -->
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-        <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-		<script src="http://maps.googleapis.com/maps/api/js?sensor=false&extension=.js&output=embed"></script>
-        <script src="{{ url_for('static', filename='js/geolocation-marker.js') }}"></script>
-		<script async defer
-      		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwCiB6WsPt1-3Jl-_clUJ7wO6ZxHvj5nk&callback=initMap">
-    	</script>
+<!-- script references -->
+<!-- AIzaSyDwCiB6WsPt1-3Jl-_clUJ7wO6ZxHvj5nk -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false&extension=.js&output=embed"></script>
+<script src="{{ url_for('static', filename='js/geolocation-marker.js') }}"></script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwCiB6WsPt1-3Jl-_clUJ7wO6ZxHvj5nk&callback=initMap">
+</script>
 
-	</body>
+</body>
 </html>
