@@ -61,6 +61,7 @@ body{
 
 body{
 	background: url(../img/hidden-edinburgh.jpg) no-repeat fixed;
+	background-size: cover;
 }
 
 #logo{
