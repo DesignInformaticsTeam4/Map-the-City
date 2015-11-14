@@ -159,6 +159,16 @@ def login():
     return render_template('login.html')
 
 
+@app.route('/u/<user_name>')
+def user_page(user_name):
+    if session:
+        if session['twitter_user'] == user_name:
+            return render_template('user_page.html')
+        else:
+            return redirect(url_for('index'))
+    else:
+        return redirect(url_for('login'))
+
 # ====================================================================================================================
 #                                                  data
 # ====================================================================================================================
@@ -206,6 +216,7 @@ def user_view():
         return json.dumps(user_data)
     else:
         return redirect('/login')
+
 
 @app.route('/story/<story_name>')
 def story_name(story_name):
@@ -297,10 +308,6 @@ def get_twitter_token(token=None):
 #                                               Basic Views
 # ====================================================================================================================
 
-@app.route('/u/<name>')
-def user_page(name):
-    """given some user id, find the stats of the user"""
-    return None
 
 @app.route('/new_user')
 def new_user():
