@@ -51,9 +51,13 @@
             </ul>
           </li>
         </ul>
+        {% if session.twitter_user %}
+
         <ul class="nav navbar-nav navbar-right">
           <li><a href="u/{{session.twitter_user}}">{{session.twitter_user}}</a></li>
+          <li><a href="/logout">logout</a></li>
         </ul>
+        {%endif%}
       </div><!--/.nav-collapse -->
     </div>
   </nav>
