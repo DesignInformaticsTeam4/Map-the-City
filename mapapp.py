@@ -231,7 +231,7 @@ def logout():
 # ====================================================================================================================
 
 @app.route('/twitter_login')
-def login():
+def twitter_login():
     callback_url = url_for('twitter_authorized', next=request.args.get('next'))
     return twitter.authorize(callback=callback_url or request.referrer or None)
 
