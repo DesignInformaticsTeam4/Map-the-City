@@ -141,15 +141,24 @@ facebook = oauth.remote_app('facebook',
 @app.route('/')
 def index():
     """Index"""
-    locs = []
-    with open('static/data/memories.json') as data_file:
-        data = json.load(data_file)
-        locs.append(data)
-    if session and session['logged_in'] == True:
-        app.logger.info(session['twitter_user'])
-        app.logger.info(session)
+    if session:
+        locs = []
+        with open('static/data/memories.json') as data_file:
+            data = json.load(data_file)
+            locs.append(data)
+        if session and session['logged_in'] == True:
+            app.logger.info(session['twitter_user'])
+            app.logger.info(session)
 
-    return render_template('index.html', locations=locs, data=open('static/data/memories.json').read().decode('utf-8'), session=session)
+        return render_template('index.html', locations=locs, data=open('static/data/memories.json').read().decode('utf-8'), session=session)
+    else:
+        return redirect('login')
+
+@app.route('/login')
+def login():
+    """Handles Authentication"""
+
+    render_template('login.html')
 
 # ====================================================================================================================
 #                                                  data
