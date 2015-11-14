@@ -1,10 +1,14 @@
 {% extends 'layout.html' %}
 {% block content %}
 <div class="jumbotron">
-    <h1>{{user_name}}</h1>
+    <h1>{{user_data.user_name}}</h1>
     <h3>Next Goal</h3>
+    <h4>{{user_data.next_point.title}}</h4>
+    <!--{{user_data.next_point}}-->
+    <img src="{{user_data.next_point.file.url}}" class="img-responsive img-rounded">
 
+    {% if user_data.passed_points|count > 0 %}  <!-- If we've already passed some points -->
     <h3>Completed Goals</h3>
-    
+    {%endif%}
 </div>
 {% endblock %}

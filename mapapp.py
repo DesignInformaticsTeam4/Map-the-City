@@ -163,7 +163,23 @@ def login():
 def user_page(user_name):
     if session:
         if session['twitter_user'] == user_name:
-            return render_template('user_page.html', user_name=user_name)
+
+            cur = g.db.execute(
+                """
+                    SELECT progression.point_number
+                    FROM progression
+                    WHERE progression.user_name = '{user_name}'
+                    AND progression.story_name = 'memories'
+                """.format(user_name = session['twitter_user'])
+            )
+            (active_point,) = cur.fetchall()[0]
+            data = open('static/data/memories.json').read()             # Open the current point
+            parsed = json.loads(data)
+            user_data = {}                                              # The data we're returning
+            user_data['next_point'] = parsed[active_point]              # Add the next active point
+            user_data['passed_points'] = parsed[:-active_point]         # Add the remaining points
+            user_data['user_name'] = user_name
+            return render_template('user_page.html', user_data=user_data)
         else:
             return redirect(url_for('index'))
     else:
