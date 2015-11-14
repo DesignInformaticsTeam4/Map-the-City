@@ -152,7 +152,7 @@ def index():
 
         return render_template('index.html', locations=locs, data=open('static/data/memories.json').read().decode('utf-8'), session=session)
     else:
-        redirect('/login')
+        return redirect('/login')
 
 @app.route('/login')
 def login():
