@@ -163,7 +163,7 @@ def login():
 def user_page(user_name):
     if session:
         if session['twitter_user'] == user_name:
-            return render_template('user_page.html')
+            return render_template('user_page.html', user_name=user_name)
         else:
             return redirect(url_for('index'))
     else:
