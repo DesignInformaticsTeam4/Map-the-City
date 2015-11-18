@@ -19,7 +19,7 @@ app.config['SECRET_KEY'] = 'pamplemousse'
 cfg = None
 
 oauth = OAuth()
-
+json_file = 'RecordStore.json'
 # ====================================================================================================================
 #                                                 dbms
 # ====================================================================================================================
@@ -143,16 +143,26 @@ def index():
     """Index"""
     if session:
         locs = []
-        with open('static/data/memories.json') as data_file:
+        app.logger.info('static/data/'+json_file)
+        with open('static/data/RecordStore.json') as data_file:
             data = json.load(data_file)
             locs.append(data)
         if session and session['logged_in'] == True:
-            app.logger.info(session['twitter_user'])
-            app.logger.info(session)
 
-        return render_template('index.html', locations=locs, data=open('static/data/memories.json').read().decode('utf-8'), session=session)
-    else:
-        return redirect('/login')
+            cur = g.db.execute(
+                """
+                    SELECT progression.point_number
+                    FROM progression
+                    WHERE progression.user_name = '{user_name}'
+                    AND progression.story_name = 'memories'
+                """.format(user_name = session['twitter_user'])
+            )
+            (active_point,) = cur.fetchall()[0]
+            data = open('static/data/'+json_file).read()             # Open the current point
+            parsed = json.loads(data)                                         # The data we're returning
+            next_point = parsed[active_point]              # Add the next active point
+            return render_template('index.html', next_point=next_point, data=open('static/data/'+json_file).read().decode('utf-8'), session=session)
+    return redirect('/login')
 
 @app.route('/login')
 def login():
@@ -173,7 +183,7 @@ def user_page(user_name):
                 """.format(user_name = session['twitter_user'])
             )
             (active_point,) = cur.fetchall()[0]
-            data = open('static/data/memories.json').read()             # Open the current point
+            data = open('static/data/'+json_file).read()             # Open the current point
             parsed = json.loads(data)
             user_data = {}                                              # The data we're returning
             user_data['next_point'] = parsed[active_point]              # Add the next active point
@@ -203,7 +213,7 @@ def json_data():
                 )
         (active_point,) = cur.fetchall()[0]                         # Parse the next point
         app.logger.info(active_point)
-        data = open('static/data/memories.json').read()             # Open the current point
+        data = open('static/data/'+json_file).read()             # Open the current point
         parsed = json.loads(data)
 
         user_data = {}                                              # The data we're returning
@@ -224,7 +234,7 @@ def user_view():
             """.format(user_name = session['twitter_user'])
         )
         (active_point,) = cur.fetchall()[0]
-        data = open('static/data/memories.json').read()             # Open the current point
+        data = open('static/data/'+json_file).read()             # Open the current point
         parsed = json.loads(data)
         user_data = {}                                              # The data we're returning
         user_data['next_point'] = parsed[active_point]              # Add the next active point
