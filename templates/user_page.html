@@ -1,14 +1,26 @@
 {% extends 'layout.html' %}
 {% block content %}
-<div class="jumbotron">
-    <h1>{{user_data.user_name}}</h1>
+<div class="jumbotron col-md-8 col-md-offset-2 text-center">
+    <h2>{{user_data.user_name}}</h2>
     <h3>Next Goal</h3>
-    <h4>{{user_data.next_point.title}}</h4>
+    <h1>{{user_data.next_point.title}}</h1>
     <!--{{user_data.next_point}}-->
-    <img src="{{user_data.next_point.file.url}}" class="img-responsive img-rounded">
-
+    <img src="{{user_data.next_point.file.url}}" class="img-responsive img-thumbnail center-block" style="max-height: 70%">
     {% if user_data.passed_points|count > 0 %}  <!-- If we've already passed some points -->
+    <hr>
     <h3>Completed Goals</h3>
-    {%endif%}
+    {% for point in user_data.passed_points %}
+        <div class="row">
+            <h1>{{point.title}}</h1>
+            <div class="col-md-6 pull-left">
+                <p class="text-left">{{point.description}}</p>
+            </div>
+            <div class="col-md-6 pull-right">
+                <img src="{{point.file.url}}" class="img-responsive img-thumbnail center-block" style="max-height: 300px">
+            </div>
+        </div>
+
+    {% endfor %}
+    {% endif %}
 </div>
 {% endblock %}

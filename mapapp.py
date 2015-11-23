@@ -183,11 +183,12 @@ def user_page(user_name):
                 """.format(user_name = session['twitter_user'])
             )
             (active_point,) = cur.fetchall()[0]
+            app.logger.info(active_point)
             data = open('static/data/'+json_file).read()             # Open the current point
             parsed = json.loads(data)
             user_data = {}                                              # The data we're returning
             user_data['next_point'] = parsed[active_point]              # Add the next active point
-            user_data['passed_points'] = parsed[:-active_point]         # Add the remaining points
+            user_data['passed_points'] = parsed[:active_point-1]         # Add the remaining points
             user_data['user_name'] = user_name
             return render_template('user_page.html', user_data=user_data)
         else:
@@ -238,7 +239,7 @@ def user_view():
         parsed = json.loads(data)
         user_data = {}                                              # The data we're returning
         user_data['next_point'] = parsed[active_point]              # Add the next active point
-        user_data['passed_points'] = parsed[:-active_point]         # Add the remaining points
+        user_data['passed_points'] = parsed[active_point:]         # Add the remaining points
         return json.dumps(user_data)
     else:
         return redirect('/login')
