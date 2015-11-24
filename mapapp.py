@@ -91,6 +91,8 @@ def create_if_new_user(user_name, g):
             FROM progression
             """
         )
+        g.db.commit()
+
         for (story_name,) in cur.fetchall():    # for all stories
             cur = g.db.execute(                 # insert the next story
                 """
@@ -158,7 +160,7 @@ def index():
                     AND progression.story_name = 'memories'
                 """.format(user_name = session['twitter_user'])
             )
-            app.logger.info(cur.fetchall())
+            # app.logger.info(cur.fetchall())
             (active_point,) = cur.fetchall()[0]
             data = open('static/data/'+json_file).read()             # Open the current point
             parsed = json.loads(data)                                         # The data we're returning
