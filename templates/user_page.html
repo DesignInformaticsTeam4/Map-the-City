@@ -12,11 +12,11 @@
     {% for point in user_data.passed_points %}
         <div class="row">
             <h1>{{point.title}}</h1>
-            <div class="col-md-6 col-xs-8 pull-left">
+            <div class="col-md-6  pull-left">
                 <p class="text-left">{{point.description}}</p>
             </div>
-            <div class="col-md-6 col-xs-4 pull-right">
-                <img src="{{point.file.url}}" class="img-responsive img-thumbnail center-block" style="max-height: 300px">
+            <div class="col-md-6 pull-right">
+                <img src="{{point.file.url}}" class="img-responsive img-thumbnail center-block" style="max-height: 150px">
             </div>
         </div>
 
