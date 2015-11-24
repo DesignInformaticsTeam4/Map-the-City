@@ -147,8 +147,9 @@ def index():
         with open('static/data/RecordStore.json') as data_file:
             data = json.load(data_file)
             locs.append(data)
-        if session and session['logged_in'] == True:
-
+        
+	if session and session['logged_in'] == True:
+	    app.logger.info(session)
             cur = g.db.execute(
                 """
                     SELECT progression.point_number
@@ -158,7 +159,7 @@ def index():
                 """.format(user_name = session['twitter_user'])
             )
             (active_point,) = cur.fetchall()[0]
-            data = open('static/data/'+json_file).read()             # Open the current point
+	    data = open('static/data/'+json_file).read()             # Open the current point
             parsed = json.loads(data)                                         # The data we're returning
             next_point = parsed[active_point]              # Add the next active point
             return render_template('index.html', next_point=next_point, data=open('static/data/'+json_file).read().decode('utf-8'), session=session)
@@ -188,7 +189,7 @@ def user_page(user_name):
             parsed = json.loads(data)
             user_data = {}                                              # The data we're returning
             user_data['next_point'] = parsed[active_point]              # Add the next active point
-            user_data['passed_points'] = parsed[:active_point-1]         # Add the remaining points
+            user_data['passed_points'] = parsed[:active_point]         # Add the remaining points
             user_data['user_name'] = user_name
             return render_template('user_page.html', user_data=user_data)
         else:
@@ -214,12 +215,13 @@ def json_data():
                 )
         (active_point,) = cur.fetchall()[0]                         # Parse the next point
         app.logger.info(active_point)
-        data = open('static/data/'+json_file).read()             # Open the current point
+        data = open('static/data/'+json_file).read()                # Open the current point
         parsed = json.loads(data)
 
         user_data = {}                                              # The data we're returning
         user_data['next_point'] = parsed[active_point]              # Add the next active point
-        user_data['hidden_points'] = parsed[active_point:]          # Add the remaining points
+        user_data['hidden_points'] = parsed[active_point+1:]          # Add the remaining points
+	app.logger.info(user_data)
         return json.dumps(user_data)
     return redirect('/')
 
@@ -239,7 +241,7 @@ def user_view():
         parsed = json.loads(data)
         user_data = {}                                              # The data we're returning
         user_data['next_point'] = parsed[active_point]              # Add the next active point
-        user_data['passed_points'] = parsed[active_point:]         # Add the remaining points
+        user_data['passed_points'] = parsed[:active_point-1]         # Add the remaining points
         return json.dumps(user_data)
     else:
         return redirect('/login')
