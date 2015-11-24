@@ -148,8 +148,8 @@ def index():
             data = json.load(data_file)
             locs.append(data)
         
-	if session and session['logged_in'] == True:
-	    app.logger.info(session)
+        if session and session['logged_in'] == True:
+            app.logger.info(session)
             cur = g.db.execute(
                 """
                     SELECT progression.point_number
@@ -158,8 +158,9 @@ def index():
                     AND progression.story_name = 'memories'
                 """.format(user_name = session['twitter_user'])
             )
+            app.logger.info(cur.fetchall())
             (active_point,) = cur.fetchall()[0]
-	    data = open('static/data/'+json_file).read()             # Open the current point
+            data = open('static/data/'+json_file).read()             # Open the current point
             parsed = json.loads(data)                                         # The data we're returning
             next_point = parsed[active_point]              # Add the next active point
             return render_template('index.html', next_point=next_point, data=open('static/data/'+json_file).read().decode('utf-8'), session=session)
@@ -221,7 +222,7 @@ def json_data():
         user_data = {}                                              # The data we're returning
         user_data['next_point'] = parsed[active_point]              # Add the next active point
         user_data['hidden_points'] = parsed[active_point+1:]          # Add the remaining points
-	app.logger.info(user_data)
+        app.logger.info(user_data)
         return json.dumps(user_data)
     return redirect('/')
 
