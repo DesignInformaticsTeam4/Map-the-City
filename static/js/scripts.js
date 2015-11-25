@@ -85,3 +85,6 @@ function add_points(){
     }); // end marker adding ajax
 }
 
+function checkin(){
+}
+

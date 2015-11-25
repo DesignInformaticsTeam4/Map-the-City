@@ -4,7 +4,9 @@
       <div>
           <h4>Your next desitination</h4>
           <h3>{{next_point.title}}</h3>
-              <img style="max-height: 20%" src="{{next_point.file.url}}" class="img-responsive img-rounded center-block"> </img>
+          <img style="max-height: 200px" src="{{next_point.file.url}}" class="img-responsive img-rounded center-block"> </img>
+          <button type="I'm here" class="btn btn-default" onclick="checkin()">Submit</button>
+          <hr>
       </div>
       <div class="row map" id="map" style="height:100%"></div>
     <!--<div class="row sites nav-stacked" id="sidebar" style="height:100%;overflow-y:scroll;">-->
