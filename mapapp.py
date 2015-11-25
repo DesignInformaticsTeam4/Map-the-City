@@ -161,10 +161,12 @@ def index():
                     AND progression.story_name = 'memories'
                 """.format(user_name = session['twitter_user'])
             )
-            # app.logger.info(cur.fetchall())
             (active_point,) = cur.fetchall()[0]
             data = open('static/data/'+json_file).read()             # Open the current point
             parsed = json.loads(data)                                         # The data we're returning
+            if active_point >= len(parsed):
+                return render_template('thankss.html')
+
             next_point = parsed[active_point]              # Add the next active point
             return render_template('index.html', next_point=next_point, data=open('static/data/'+json_file).read().decode('utf-8'), session=session)
     return redirect('/login')

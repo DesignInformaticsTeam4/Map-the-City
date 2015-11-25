@@ -56,7 +56,7 @@ function add_points(){
                 map: map,
                 title: data.next_point.title                                        // get the memory title
         });
-        alert(marker.position);
+        //alert(marker.position);
         marker.id = data.next_point.id;
         marker.setMap(map);
         markers.push(marker);
