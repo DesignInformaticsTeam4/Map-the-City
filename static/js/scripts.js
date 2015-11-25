@@ -83,9 +83,8 @@ function add_points(){
 }
 
 function checkin(){
-    
-    alert(Object.keys(next_point));
-    alert(next_point.description);
-    alert(next_point.title);
+    document.getElementById("title").innerHTML =  next_point.title;
+    document.getElementById("description").innerHTML = next_point.description;
+    $('#myModal').modal('show');
 }
 
