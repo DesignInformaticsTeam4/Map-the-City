@@ -88,3 +88,19 @@ function checkin(){
     $('#myModal').modal('show');
 }
 
+function progress(){
+//    xhttp.open("POST", "/progress", true);
+//    xhttp.send();
+//    $.ajax({
+//            url: '/progress',
+//            type: 'POST',
+//            success: function(response) {
+//                console.log(response);
+//            },
+//            error: function(error) {
+//                console.log(error);
+//            }
+//        });
+
+    $.post("/progress",{},location.reload);
+}

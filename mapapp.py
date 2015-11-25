@@ -5,6 +5,7 @@ import os
 import json
 import pickle
 import sqlite3
+import requests
 
 __author__ = 'kongaloosh'
 
@@ -168,10 +169,37 @@ def index():
             return render_template('index.html', next_point=next_point, data=open('static/data/'+json_file).read().decode('utf-8'), session=session)
     return redirect('/login')
 
+
 @app.route('/login')
 def login():
     return render_template('login.html')
 
+@app.route('/progress', methods=['GET', 'POST'])
+def progress():
+    app.logger.info("yo boi")
+    if request.method == 'POST':
+        if session['twitter_user']:
+            cur = g.db.execute(
+                """
+                    SELECT progression.point_number
+                    FROM progression
+                    WHERE progression.user_name = '{user_name}'
+                    AND progression.story_name = 'memories'
+                """.format(user_name = session['twitter_user'])
+            )
+
+            (active_point,) = cur.fetchall()[0]
+            a = """
+                UPDATE progression
+                SET point_number={x}
+                WHERE story_name='memories'
+                AND user_name='{user_name}'
+                """.format(x=(active_point+1), user_name=session['twitter_user'])
+            app.logger.info(a)
+            g.db.execute(a)
+            g.db.commit()
+
+        return 200
 
 @app.route('/u/<user_name>')
 def user_page(user_name):
