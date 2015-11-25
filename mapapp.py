@@ -199,7 +199,7 @@ def progress():
             g.db.execute(a)
             g.db.commit()
 
-        return 200
+        return render_template("okay.html"), 200
 
 @app.route('/u/<user_name>')
 def user_page(user_name):
